@@ -5,6 +5,7 @@ x-template: &template
     context: .
   volumes:
     - ./:/workspace
+  user: "${UID}:${GID}"
 
 services:
   zenn-init:
