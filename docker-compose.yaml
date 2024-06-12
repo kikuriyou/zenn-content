@@ -1,0 +1,27 @@
+version: '3.8'
+
+x-template: &template
+  build:
+    context: .
+  volumes:
+    - ./:/workspace
+  user: "${UID}:${GID}"
+
+services:
+  zenn-init:
+    container_name: zenn-init
+    image: zenn-init:latest
+    command: npx zenn init
+    <<: *template
+  zenn-preview:
+    container_name: zenn-preview
+    image: zenn-preview:latest
+    ports:
+      - "8000:8000"
+    command: npx zenn preview
+    <<: *template
+  zenn-new-article:
+    container_name: zenn-new-article
+    image: zenn-new-article:latest
+    command: /bin/bash new-article.sh
+    <<: *template
