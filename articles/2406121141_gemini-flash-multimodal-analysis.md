@@ -512,7 +512,7 @@ shap.plots.text(shap_values)
 **データに含まれるバイアスの考慮**
 モデルの解釈結果に意図せずバイアスが含まれる場合があります。詳しくは[Responsible AI practices](https://ai.google/responsibility/responsible-ai-practices/)等を参照いただきたいですが、分析結果をまとめる際にはバイアス可能性の考慮が必要です。
 
-また、過去には広告クリエイティブの領域ではテキストデータの寄与度分析を行い、その結果をクリエイティブ作成に活用した事例があります。今回は画像データの要素を抽出しているので、その結果を使って画像クリエイティブの作成やText-to-Imageのプロンプトに役立てることもできるかもしれません。その他の応用例として、Gemini 1.5 FlashはVideo-to-Textの変換も行えるため動画データでも同様の分析を試すのも可能かと思います。
+また、過去の似た事例として、広告クリエイティブの領域ではテキストデータの寄与度分析を行い、その結果をクリエイティブ作成に活用した[事例](https://www.thinkwithgoogle.com/intl/ja-jp/marketing-strategies/automation/ml_creative/)があります。今回は画像データの要素を抽出しているので、その結果を使って画像クリエイティブの作成やText-to-Imageのプロンプトに役立てることもできるかもしれません。その他の応用例として、Gemini 1.5 FlashはVideo-to-Textの変換も行えるため動画データでも同様の分析を試すのも可能かと思います。
 以上、簡単ではありますが、Vertex AI Gemini 1.5 Flashを活用した画像データの要因分析を紹介しました。何かの参考になれば幸いです。
 
 # 参考文献
