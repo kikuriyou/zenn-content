@@ -3,7 +3,7 @@ title: "Gemini 1.5 Flashでマルチモーダル分析を試す"
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini", "vlm", "ai"]
-published: false
+published: true
 publication_name: hogeticlab
 ---
 
