@@ -163,7 +163,7 @@ with open(CFG.pickle_path, mode='wb') as f:
 
 ## キャプションのテキストデータからユーザー評価を予測するモデルを作成
 
-次に、Gemini 1.5 Flashによって得られたテキストデータを使ってユーザー評価を予測するモデルを作成します。事前学習済みモデルとしてBERT([google-bert/bert-base-cased](https://huggingface.co/google-bert/bert-base-cased))を用いて、5epochほどFinetuningを行います。参考のためにコードも載せていますが長いので読み飛ばして構いません。各パラメータをきちんと探索したわけではありませんが、Finetuningによって検証用データにおけるRMSEが1.07程度になったため学習できたものと判断し次のプロセスに進みます。
+次に、Gemini 1.5 Flashによって得られたテキストデータを使ってユーザー評価を予測するモデルを作成します。事前学習済みモデルとしてBERT([google-bert/bert-base-cased](https://huggingface.co/google-bert/bert-base-cased))を用いて、5epochsほどFinetuningを行います。参考のためにコードも載せていますが長いので読み飛ばして構いません。各パラメータをきちんと探索したわけではありませんが、Finetuningによって検証用データにおけるRMSEが1.07程度になったため学習できたものと判断し次のプロセスに進みます。
 
 
 :::details コード
