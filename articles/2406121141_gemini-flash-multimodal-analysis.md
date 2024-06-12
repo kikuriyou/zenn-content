@@ -1,5 +1,5 @@
 ---
-title: "Vertex AI Gemini 1.5 Flashを用いたマルチモーダル要因分析"
+title: "Vertex AI Gemini 1.5 Flashを用いたマルチモーダル分析"
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini", "vlm", "ai"]
