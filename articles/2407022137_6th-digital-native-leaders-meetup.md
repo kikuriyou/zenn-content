@@ -4,6 +4,7 @@ emoji: "🍀"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "google"]
 published: false
+publication_name: hogeticlab
 ---
 
 こんにちは、Hogetic Lab の喜久里です。先日、Google さん主催の Digital Native Leader's Meetup に参加してきました。
