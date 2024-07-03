@@ -11,7 +11,7 @@ publication_name: hogeticlab
 
 
 # Digital Native Leader’s Meetup とは
-Digital Native Leader's Meetup は、Google Cloud を利用するエンジニア向けの交流イベントです。普段はあまり接点のない様々な企業のエンジニア同士がオフラインで集まり、ネットワーキングや情報交換を通じて、お互いのプロダクト開発を加速させることを目的としています。
+Digital Native Leader's Meetup は、Google Cloud を利用するエンジニア向けの交流イベントです。普段はあまり接点のない様々な企業のエンジニア同士がオフラインで集まり、ネットワーキングや情報交換を通じて、お互いのプロダクト・サービス開発を加速させることを目的としています。
 今回のイベントでは Google さんとの NDA の上で1社1名までが参加条件になっており、次のようなコンテンツを通して参加者同士で技術的な課題や情報共有を行える場として開催されています。
 - ユーザー企業事例に関する Lightning Talk
 - Shane Gu 氏の話題提供
