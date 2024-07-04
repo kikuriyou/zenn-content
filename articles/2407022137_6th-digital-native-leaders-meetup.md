@@ -43,9 +43,6 @@ Digital Native Leader's Meetup は、Google Cloud を利用するエンジニア
 この記事が、今後の Digital Native Leader's Meetup への参加を検討されている方の参考になれば幸いです。
 
 
-## TODO:
-- 写真追加したい
-  - ポーチ、YouTube Retro Duffel
-  - 参加者がたくさんうつっている全体の写真(iwakiさん相談)
-  - ごはん(iwakiさん相談)
-- iwakiさんにレビュー
+![](/images/articles/6th-digital-native-leaders-meetup/image.png)
+*Meetup の様子*
+
