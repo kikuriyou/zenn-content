@@ -41,8 +41,3 @@ Digital Native Leader's Meetup は、Google Cloud を利用するエンジニア
 # おわりに
 私は Google さん主催の Meetup に初めて参加したもので、周囲の様子をうかがいながら参加していたのですが、蓋を開けてみると思ったより近しい方々が参加されていることがわかり、さらには様々なお話をさせていただくことができ、刺激のある貴重な時間になりました。その過程では主催の Google さんの多大な配慮があったことは言うまでもないですが、初めて参加する方にもおすすめできるものと感じました。
 この記事が、今後の Digital Native Leader's Meetup への参加を検討されている方の参考になれば幸いです。
-
-
-![](/images/articles/6th-digital-native-leaders-meetup/image.png)
-*Meetup の様子*
-
