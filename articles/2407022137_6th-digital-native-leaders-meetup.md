@@ -3,7 +3,7 @@ title: "第6回 Digital Native Leader’s Meetup に参加しました"
 emoji: "🍀"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "google"]
-published: false
+published: true
 publication_name: hogeticlab
 ---
 
