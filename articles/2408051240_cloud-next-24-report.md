@@ -33,7 +33,7 @@ Innovators Stage LT での岡安優氏（株式会社unerry）による発表で
 このようなAIエージェントによる分析プロセスの自動化が実現すると、人間の分析者がより重要な業務プロセスに集中できることが期待されます。
 
 ![](/images/articles/cloud-next-24-report/analysis_flow.png)
-*分析フロー*
+*分析フローと自動化ポイント*
 
 
 ## ドメイン特化型マルチモーダル生成 AI の学習プロセス
@@ -59,7 +59,7 @@ Google Cloudの片岡義雅氏と東京工業大学の藤井一喜氏による�
 - [GENIAC: 172B 事前学習知見](https://zenn.dev/tokyotech_lm/articles/deb8012251bb68)
 
 ![](/images/articles/cloud-next-24-report/portfolio.jpg)
-*アクセラレーターのポートフォリオ*
+*AI アクセラレータのポートフォリオ*
 
 ![](/images/articles/cloud-next-24-report/hyperdisk_ml.jpg)
 *Hyperdisk ML*
