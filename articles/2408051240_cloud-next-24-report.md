@@ -3,7 +3,7 @@ title: "Google Cloud Next Tokyo '24 参加レポート"
 emoji: "🍀"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "google"]
-published: false
+published: true
 publication_name: hogeticlab
 ---
 
