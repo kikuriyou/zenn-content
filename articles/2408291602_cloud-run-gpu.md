@@ -26,6 +26,21 @@ CPU のみの Cloud Run と同様に、インスタンスや GPU の稼働時間
 GPU の設定は、CPU のみの場合と同様に、コンソールや gcloud CLI、YAML ファイルを使用して行えます。現時点では、[Cloud Run GPU sign up](https://services.google.com/fb/forms/cloudrungpusignup/) から利用申請を行う必要があり、この承認には時間を要することがあります。利用開始後は、ドライバなどの管理は不要でフルマネージド、オンデマンドで GPU を利用することができるようになります。
 また、GPU を効率的に活用するためには、公式ドキュメント上に公開されている[ベストプラクティス](https://cloud.google.com/run/docs/configuring/services/gpu-best-practices)の内容を押さえておくのが良いでしょう。LLM のような大規模モデルをロードする際の、アプローチごとのトレードオフ、デプロイ時の注意点、インスタンスごとの並行リクエスト数に応じたオートスケーリングなどについて詳細に記載されています。
 
+
+次のように、通常の Cloud Run の gcloud コマンドに、 `--gpu`, `--gpu-type` を追加することで GPU を利用できます。
+```
+  gcloud beta run deploy SERVICE \
+    --image IMAGE_URL \
+    --project PROJECT_ID \
+    --region REGION \
+    --port PORT \
+    --cpu CPU \
+    --memory MEMORY \
+    --gpu GPU_NUMBER \
+    --gpu-type GPU_TYPE
+```
+
+
 # おわりに
 おそらく多くの方が待望の Cloud Run の GPU サポートについて解説しました。利用状況に応じてのスケーリングが可能な Cloud Run において GPU を利用できることで、LLM などを含む API やワークロードのサービングが柔軟に行えることが期待されます。一方で料金体系に少しクセがあったり、効率的に GPU 設定をハンドリングするためのコツがあるので、周辺情報を理解した上で開発などに取り入れるのが良いでしょう。
 
