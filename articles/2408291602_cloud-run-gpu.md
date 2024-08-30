@@ -9,7 +9,11 @@ publication_name: hogeticlab
 
 
 # はじめに
-Google Cloud のサーバーレスコンピューティングプラットフォームである Cloud Run に、待望の GPU サポートが導入されました。この新機能により、LLM をはじめとする 大規模な AI モデルの推論を行うためのワークロードや、画像や動画の編集といった演算処理負荷の大きな用途を、Cloud Run 上で実行できるようになります。本記事では、このCloud Run の GPU サポートについて解説していきます。
+Google Cloud のサーバーレスコンピューティングプラットフォームである Cloud Run に、待望の GPU サポートがプレビュー公開されました。この新機能により、
+- オープンな言語モデルの推論のリアルタイム実行
+- ファインチューニングされたカスタム画像生成 AI モデルのサービング
+- オンデマンドの画像認識、動画のコード変換とストリーミング、3D レンダリングといった演算負荷の大きな処理
+などといった用途で Cloud Run 上で実行できるようになります。本記事では、このCloud Run の GPU サポートについて解説していきます。
 
 - 公式ドキュメント: [GPU (services)](https://cloud.google.com/run/docs/configuring/services/gpu)
 
@@ -27,7 +31,7 @@ GPU の設定は、CPU のみの場合と同様に、コンソールや gcloud C
 また、GPU を効率的に活用するためには、公式ドキュメント上に公開されている[ベストプラクティス](https://cloud.google.com/run/docs/configuring/services/gpu-best-practices)の内容を押さえておくのが良いでしょう。LLM のような大規模モデルをロードする際の、アプローチごとのトレードオフ、デプロイ時の注意点、インスタンスごとの並行リクエスト数に応じたオートスケーリングなどについて詳細に記載されています。
 
 
-次のように、通常の Cloud Run の gcloud コマンドに、 `--gpu`, `--gpu-type` を追加することで GPU を利用できます。
+次のコードが GPU 利用時のコード例ですが、通常の Cloud Run の gcloud コマンドに、 `--gpu`, `--gpu-type` を追加することで GPU を利用できます。
 ```
   gcloud beta run deploy SERVICE \
     --image IMAGE_URL \
