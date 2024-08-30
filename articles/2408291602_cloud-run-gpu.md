@@ -18,6 +18,7 @@ Google Cloud のサーバーレスコンピューティングプラットフォ�
 などといった用途で Cloud Run 上で実行できるようになります。本記事では、このCloud Run の GPU サポートについて解説していきます。
 
 - 公式ドキュメント: [GPU (services)](https://cloud.google.com/run/docs/configuring/services/gpu)
+- 関連記事: [NVIDIA GPU を使用した Cloud Run での AI 推論アプリケーションの実行](https://cloud.google.com/blog/ja/products/application-development/run-your-ai-inference-applications-on-cloud-run-with-nvidia-gpus)
 
 # Cloud Run の GPU サポートとは
 Cloud Run はゼロからの自動スケーリングが可能なため、API のサービング等に多く用いられています。しかし、演算は CPU のみの対応であったため、GPU を必要とするワークロードのサービングは難しいのが現状でした(正確にはAnthosを使うと対応可能ではあります)。今回の GPU サポートによって、GPU を必要とするワークロードも含めた API のサービングを手軽に行えることが期待されます。しかしながら、推奨されるインスタンス要件には制約があり、CPU のみの場合と比べて、利用には注意が必要です。
