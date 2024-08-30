@@ -3,7 +3,7 @@ title: "Cloud Run で GPU を利用できるようになったので解説しま
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "cloudrun", "gpu"]
-published: false
+published: true
 publication_name: hogeticlab
 ---
 
