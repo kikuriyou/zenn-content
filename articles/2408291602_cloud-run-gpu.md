@@ -10,9 +10,11 @@ publication_name: hogeticlab
 
 # はじめに
 Google Cloud のサーバーレスコンピューティングプラットフォームである Cloud Run に、待望の GPU サポートがプレビュー公開されました。この新機能により、
+
 - オープンな言語モデルの推論のリアルタイム実行
 - ファインチューニングされたカスタム画像生成 AI モデルのサービング
 - オンデマンドの画像認識、動画のコード変換とストリーミング、3D レンダリングといった演算負荷の大きな処理
+
 などといった用途で Cloud Run 上で実行できるようになります。本記事では、このCloud Run の GPU サポートについて解説していきます。
 
 - 公式ドキュメント: [GPU (services)](https://cloud.google.com/run/docs/configuring/services/gpu)
