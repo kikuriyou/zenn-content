@@ -3,7 +3,7 @@ title: "LACO Meetup#16 ランチタイムLT「あなたの認定資格取得の�
 emoji: "🍀"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "google", "googlecloud認定資格"]
-published: false
+published: true
 publication_name: hogeticlab
 ---
 
