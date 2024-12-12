@@ -4,6 +4,7 @@ emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini", "bigquery", "mcp"]
 published: false
+publication_name: hogeticlab
 ---
 
 [Google Cloud Champion Innovators Advent Calendar 2024](https://adventar.org/calendars/10061) の 12 日目の記事です。
