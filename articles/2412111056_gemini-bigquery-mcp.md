@@ -17,7 +17,7 @@ LLM が広く普及し、活用範囲が急速に拡大してきたことで、�
 
 
 # Gemini 2.0 Flash とは
-Gemini 2.0 Flash は、2024 年 12 月に発表された Gemini シリーズの最新モデルです。[発表](https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0-flash)によると、これまでの Gemini 1.5 Flash と同様に高速でありながら、多くのベンチマークスコアで Gemini 1.5 Pro を上回っていることがわかります。また、マルチモーダル理解、複雑な指示の実行および計画、ツール連携機能が向上し、より優れたエージェント体験をサポートするとのことで、本記事でのユースケースにぴったりのモデルと考えられます。その他、画像生成や TTS にも今後対応予定（現在は早期アクセスのパートナーのみ）との記述もあり、ますます期待が膨らみます。
+Gemini 2.0 Flash は、2024 年 12 月に発表された Gemini シリーズの最新モデルです。[発表](https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0-flash)によると、これまでの Gemini 1.5 Flash と同様に高速でありながら、多くのベンチマークスコアで Gemini 1.5 Pro を上回っていることがわかります。また、マルチモーダル理解、複雑な指示の実行および計画、ツール連携機能が向上し、より優れたエージェント体験をサポートするとのことで、本記事でのユースケースにぴったりのモデルと考えられます。その他、画像生成や TTS にも今後対応予定との記述もあり、ますます期待が膨らみます。
 
 - [Introducing Gemini 2.0: our new AI model for the agentic era](https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#ceo-message)
 - [The next chapter of the Gemini era for developers](https://developers.googleblog.com/en/the-next-chapter-of-the-gemini-era-for-developers/)
