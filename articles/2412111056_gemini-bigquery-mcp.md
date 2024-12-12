@@ -3,7 +3,7 @@ title: "Gemini 2.0 Flash から MCP を利用して BigQuery を操作する"
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini", "bigquery", "mcp"]
-published: false
+published: true
 publication_name: hogeticlab
 ---
 
