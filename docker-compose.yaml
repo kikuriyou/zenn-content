@@ -17,7 +17,8 @@ services:
     container_name: zenn-preview
     image: zenn-preview:latest
     ports:
-      - "8000:8000"
+      #- "8000:8000"
+      - "8008:8000"
     command: npx zenn preview
     <<: *template
   zenn-new-article:
