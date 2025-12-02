@@ -3,7 +3,8 @@ title: "Tabular 'Vibe Modeling' or Its Equivalent with Gemini 3.0 Pro."
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini"]
-published: false
+published: true
+published_at: 2026-01-05 08:00
 ---
 
 ## Introduction

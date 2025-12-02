@@ -3,7 +3,8 @@ title: "Tabular 'Vibe Modeling' or Its Equivalent with Gemini 3.0 Pro. (Conv.)"
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini"]
-published: false
+published: true
+published_at: 2026-01-06 08:00
 ---
 
 This is the article for Day 19 of the [JP_Google Developer Experts Advent Calendar 2025](https://adventar.org/calendars/11658).
