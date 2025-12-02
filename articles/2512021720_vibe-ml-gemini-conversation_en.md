@@ -1,5 +1,5 @@
 ---
-title: "Tabular Data 'Vibe Modeling' or Its Equivalent Using Gemini 3.0 Pro - Conversation Edition."
+title: "Tabular 'Vibe Modeling' or Its Equivalent with Gemini 3.0 Pro. (Conv.)"
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini"]
