@@ -51,7 +51,7 @@ published: true
     ```
     :::
 
-- ② ①に加えて、試行錯誤（Trial & Error）させて改善を促す
+- ② ①に加えて、試行錯誤させて改善を促す
 
     :::details 02_try_and_error_requirements.txt
     ```text
