@@ -4,6 +4,7 @@ emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini"]
 published: false
+published_at: 2025-12-02 19:00
 ---
 
 ## Introduction
