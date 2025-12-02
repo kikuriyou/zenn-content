@@ -4,7 +4,7 @@ emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini"]
 published: true
-published_at: 2025-12-09 08:00
+published_at: 2025-12-05 08:00
 ---
 
 [JP_Google Developer Experts Advent Calendar 2025](https://adventar.org/calendars/11658) の 19 日目の記事です。
