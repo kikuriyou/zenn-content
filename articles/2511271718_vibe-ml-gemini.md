@@ -19,7 +19,7 @@ published: true
 なお、本記事では生成されたコードに対して対話しながら修正するようなアプローチは取らず、最初の指示による一発出しや LLM の自律的な試行錯誤でどこまでいけるかを実験します。
 
 ![](/images/articles/vibe-ml-gemini/vibe_modeling.jpg)
-*Vibe Modeling のイメージ(本当に?)*
+*Vibe Modeling のイメージ(本当か?)*
 
 ## 実験の設定
 
