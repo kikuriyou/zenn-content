@@ -3,7 +3,7 @@ title: "Gemini CLI と Gemini 3.0 Pro でテーブルデータの Vibe Modeling 
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googlecloud", "vertexai", "gemini"]
-published: false
+published: true
 ---
 
 [JP_Google Developer Experts Advent Calendar 2025](https://adventar.org/calendars/11658) の 2 日目の記事です。
@@ -17,6 +17,9 @@ published: false
 一般的に、ソフトウェア開発における生成AI支援では指示を具体的にすればするほど成果物の品質が高まる傾向にあります。この記事では、プロンプトの指示レベルを変化させて機械学習パイプラインのコードを生成し（本記事ではこれを勝手に Vibe Modeling と呼びます）、生成されたコードがどのように変化するか、その品質を確認したいと思います。
 
 なお、本記事では生成されたコードに対して対話しながら修正するようなアプローチは取らず、最初の指示による一発出しや LLM の自律的な試行錯誤でどこまでいけるかを実験します。
+
+![](/images/articles/vibe-ml-gemini/vibe_modeling.jpg)
+*Vibe Modeling のイメージ(本当に?)*
 
 ## 実験の設定
 
