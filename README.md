@@ -15,6 +15,12 @@ $ docker-compose up zenn-preview
 $ bash deploy.sh
 ```
 
+# How to check preview page
+```sh
+# ポートフォワードしてアクセスし、ブラウザで localhost:8008 を開く
+$ ssh -L 8008:localhost:8008 nuc
+```
+
 # cf.
 
 - [Githubとの連携方法](https://zenn.dev/zenn/articles/connect-to-github)
