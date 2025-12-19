@@ -247,14 +247,83 @@ if __name__ == "__main__":
 - 検証は単純な holdout で行われている（交差検証にしたい）。
 - 特徴量の作成において `Quantity` や `UnitPrice` が 0 より大きいレコードに絞っています。これは気が利いているとも取れますが、本来はデータの仕様やビジネス要件に関わる部分なので、勝手に判断せず確認してほしい部分でもあります。
 
-### 汎化性能の向上（交差検証、特徴量追加等）
+### 性能改善のための会話と修正
 
 汎化性能を向上させるため、交差検証への変更を指示します。
 
-```docker
+```
 汎化性能を向上させたいです。現在は単純なholdoutですが、交差検証に変更してください。
 これまでに引き続き、リークには十分に気をつけてください。
 ```
+
+:::details 生成されたコード（交差検証 / 抜粋）
+```python
+
+# Time Series Cross-Validation
+n_splits = 4
+tscv = TimeSeriesSplit(n_splits=n_splits)
+
+cv_mae_scores = []
+cv_r2_scores = []
+
+print(f"\nStarting Time Series Cross-Validation with {n_splits} splits...")
+
+fold = 0
+for train_index, val_index in tscv.split(unique_dates):
+    fold += 1
+    val_dates = unique_dates[val_index]
+    potential_train_dates = unique_dates[train_index]
+    
+    # LEAKAGE PREVENTION:
+    # Ensure there is a gap between the training data and validation data.
+    # Validation targets are for [val_date, val_date + 29].
+    # Training targets are for [train_date, train_date + 29].
+    # We must strictly ensure that the Training Target period ends before the Validation Prediction Date?
+    # Actually, more strictly: When making a prediction at `val_date`, we only have access to data 
+    # where the target outcome is already known.
+    # Target outcome for `train_date` is known at `train_date + 30`.
+    # So we need `train_date + 30 <= val_date`.
+    
+    min_val_date = val_dates.min()
+    valid_train_dates = [d for d in potential_train_dates if d + pd.Timedelta(days=30) <= min_val_date]
+    
+    if not valid_train_dates:
+        print(f"Fold {fold}: Skipped - Not enough history for training with strict leakage prevention gap.")
+        continue
+        
+    train_df = full_dataset[full_dataset['prediction_date'].isin(valid_train_dates)]
+    val_df = full_dataset[full_dataset['prediction_date'].isin(val_dates)]
+    
+    X_train = train_df.drop(columns=['CustomerID', 'next_30_days_total_amount', 'prediction_date'])
+    y_train = train_df['next_30_days_total_amount']
+
+    X_val = val_df.drop(columns=['CustomerID', 'next_30_days_total_amount', 'prediction_date'])
+    y_val = val_df['next_30_days_total_amount']
+    
+    model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+    model.fit(X_train, y_train)
+    
+    y_pred = model.predict(X_val)
+    
+    mae = mean_absolute_error(y_val, y_pred)
+    r2 = r2_score(y_val, y_pred)
+    
+    cv_mae_scores.append(mae)
+    cv_r2_scores.append(r2)
+    
+    print(f"Fold {fold}: Train Dates: {len(valid_train_dates)} ({pd.to_datetime(valid_train_dates[0]).date()} to {pd.to_datetime(valid_train_dates[-1]).date()}), Val Dates: {len(val_dates)} ({pd.to_datetime(val_dates[0]).date()} to {pd.to_datetime(val_dates[-1]).date()}) - MAE: {mae:.2f}, R2: {r2:.2f}")
+
+if cv_mae_scores:
+    print(f"\nAverage MAE across {len(cv_mae_scores)} folds: {np.mean(cv_mae_scores):.2f}")
+    print(f"Average R2 across {len(cv_mae_scores)} folds: {np.mean(cv_r2_scores):.2f}")
+else:
+    print("\nNo valid folds found for cross-validation.")
+    return
+
+```
+:::
+
+この変更は特に問題なさそうです。
 
 さらに、評価指標の変更と、検証期間の刻みを変更する指示を追加します。
 
@@ -263,7 +332,7 @@ if __name__ == "__main__":
 - current_prediction_dateが7日刻みですが30日ごとにして
 ```
 
-これにより、データセット生成の間隔が30日になり、RMSEが出力されるようになりました。ただ、こういったパラメータ変更は本来はわざわざ指示を出さずとも自分でコードを修正したほうが早いです。
+変更が複数箇所にわたるのでコードは省略しますが、これによりデータセット生成の間隔が30日になり、RMSEが出力されるようになりました。ただ、こういったパラメータ変更は本来はわざわざ指示を出さずとも自分でコードを修正したほうが早いです。
 次に、モデルを LightGBM に変更します。
 
 ```docker
@@ -277,8 +346,51 @@ scikit-learnラッパーではなく元のLightGBMのPython APIを用いてく�
 予測結果を解釈しやすくしたいのでimportanceを出力して
 ```
 
-出力させてみたところ、特徴量が3つしか使われていないことに気づきました。
-精度改善のため、具体的な特徴量の追加を指示します。
+ここまでのコードはこのようになります。大きな問題はありませんが、重要度はグラフで出力してほしいなーとも思います。しかしこのあたりから会話に疲れてきたため指示を省いてしまいました。
+
+:::details 生成されたコード（LightGBM, 特徴量重要度の追加まで）
+```
+# Create LightGBM datasets
+dtrain = lgb.Dataset(X_train, label=y_train)
+dval = lgb.Dataset(X_val, label=y_val, reference=dtrain)
+
+# Train model
+model = lgb.train(
+    params,
+    dtrain,
+    num_boost_round=1000,
+    valid_sets=[dtrain, dval],
+    callbacks=[lgb.early_stopping(stopping_rounds=50), lgb.log_evaluation(period=0)] # period=0 disables verbose logging
+)
+
+best_iterations.append(model.best_iteration)
+
+y_pred = model.predict(X_val, num_iteration=model.best_iteration)
+
+# (中略..)
+
+if not X_inference.empty:
+    inference_predictions = model_final.predict(X_inference, num_iteration=model_final.best_iteration)
+    
+    inference_results = pd.DataFrame({
+        'CustomerID': inference_features_df['CustomerID'],
+        'Predicted_Next_30_Days_Amount': inference_predictions
+    })
+    
+    print("\nTop 5 customers with highest predicted purchase amount for the next 30 days:")
+    print(inference_results.sort_values(by='Predicted_Next_30_Days_Amount', ascending=False).head())
+
+    print("\nBottom 5 customers with lowest (or zero) predicted purchase amount for the next 30 days:")
+    print(inference_results.sort_values(by='Predicted_Next_30_Days_Amount', ascending=True).head())
+else:
+    print("No customers found for inference features. Cannot perform inference.")
+
+```
+:::
+
+
+特徴量に重要度を出力したところで、特徴量が3つしか使われていないことに気づきました。
+精度改善のため、特徴量の追加を具体的に指示します。
 
 ```docker
 さらに精度を改善するために特徴量追加を試します。
@@ -291,24 +403,23 @@ scikit-learnラッパーではなく元のLightGBMのPython APIを用いてく�
 - これまでの購入金額のsum, max, min, median
 ```
 
-この指示に対して、最初は集計期間を固定しない過去通算の集計を追加してきたり、微妙な修正を何度か繰り返す必要がありました。
+この指示に対して、最初は集計期間を固定しない過去通算の集計を追加してきたり、微妙な修正を何度か繰り返す必要がありました。例えば、ここまで30日windowで集計していたのに急に180日の集計が加わり、この修正のために2,3往復を要しました。
 集計ロジックのような細かい部分は、言葉で指示するよりも自分で書くか事前に詳細な仕様を伝える方が確実だと感じました。
 
 :::details 修正の過程（抜粋）
 ```python
-# 集計windowが固定されていなかったため修正(30日windowで集計していたのに急に180日の集計が加わった例)
-+     long_window_features = long_window_df.groupby('CustomerID').agg(
-+         last_180_days_record_count=('InvoiceNo', 'count'),
-... # (rest of the code)
-+         last_180_days_amount_median=('Amount', 'median')
-+     ).reset_index()
++ long_window_features = long_window_df.groupby('CustomerID').agg(
++     last_180_days_record_count=('InvoiceNo', 'count'),
+      # (中略...)
++     last_180_days_amount_median=('Amount', 'median')
++ ).reset_index()
 ```
 :::
 
 
 ### 最終的なコード
 
-会話を続けて完成したコードは以下の通りです。ここまでで筆者のやりたいこと（前記事の詳細な要件）は概ね入ってはいるのですが、微妙に冗長だったり微妙に設定を変更したい箇所が少なからずあり、会話だけでの編集はまどろっこしさがあると感じました。会話主体でコーディングする場合でも直接編集は併用したいですね。（当たり前といえば当たり前ですが...）
+会話を続けて完成したコードは以下の通りです。ここまでで筆者のやりたいこと（前記事の詳細な要件）は概ね入ってはいるのですが、微妙に冗長だったり設定を変更したい箇所が少なからずあり、会話だけでの編集はまどろっこしさがあると感じました。会話主体でコーディングする場合でも直接編集は併用したいですね。（それはそう）
 
 :::details 最終的なコード（やりたいことが決まっている場合）
 ```python
@@ -666,15 +777,15 @@ if __name__ == "__main__":
 
 ### 感想
 
-- パラメータ変更などの細かい修正は、直接コードを編集する方が圧倒的に早いです。
-- 交差検証の実装など、やればできるが実装量が地味に多い、というような変更を任せるのは効率的だと感じました。
+- パラメータ変更などの細かい修正は、直接コードを編集する方が明らかに早いです。
+- 交差検証の実装など、やることは明確だが実装量が地味に多い、というような変更を任せるのは効率的だと感じました。
 - 仕様が曖昧な部分で勝手な解釈が入ることがあるため、明確な指示がない箇所は注意が必要です。
-- 生成されるたびにレビューが必要ですが、頻繁なレビューは注意力を要するのと、少しの油断でバグや仕様の勘違いを見落とし得ると感じました。
+- 生成されるたびにレビューが必要ですが、頻繁なレビューは注意力を要するのと、少しの油断でバグや仕様の勘違いを見落とし得ると感じました。（というか度々見落としていた）
 
 
 ## 2. 壁打ちしながら実装を進める場合
 
-次は具体的な改善案を持たず実装方針まで含めて LLM に相談しながら進めるパターンです。
+次は具体的な改善案を持たずに、実装方針も含めて LLM に相談しながら進めるパターンです。
 モデルの学習や推論の文脈では、筆者自身はこの方法はあまり使わないのですが、実装する言語や内容が不慣れな場合（筆者の場合は他分野のアプリ実装など）にこういった進め方をすることがあると考えられるため、参考のため確認しておきます。
 ここでは、LLM が言ったことは基本的に信用して、実装を進めることにします。
 
@@ -687,6 +798,7 @@ if __name__ == "__main__":
 このドキュメントをベースにモデルの学習、推論コードを実装してください。
 ```
 :::details 生成されたコード
+```
 # /// script
 # dependencies = ["pandas", "scikit-learn", "numpy"]
 # ///
@@ -896,15 +1008,17 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
 :::
 
-このコードはこれまでの概要指示のみの一発出しのコードとほぼ同等の内容なので、続けてデータの前処理について相談します。
+このコードはこれまでの概要指示のみの一発出しのコードとほぼ同等の内容なので、続けてデータの前処理の相談に移ります。
 
 ```python
 データ内容や特性にもとづいて前処理を行いたい、必要な前処理を考えるためにどんなことを確認すれば良いですか
 ```
 
 :::details 返答
+```
 ✦ データを確認した結果、以下の前処理を検討・実行すべきことがわかりました。
 
   1. CustomerID 欠損の除外
@@ -961,9 +1075,10 @@ if __name__ == "__main__":
    25     # ... (以下、日付変換など) ...
 
   この前処理を追加してコードを修正しますか？
+```
 :::
 
-仕様が曖昧な部分まで実装方針を決めてしまっている部分もありますが、ここではそのまま実装を移りました。
+仕様が曖昧な部分まで実装方針を決めてしまっている部分もありますが、ここでは LLM の言うことを信じてそのまま実装に移りました。
 
 ### 精度向上の相談
 
@@ -974,6 +1089,7 @@ if __name__ == "__main__":
 ```
 
 :::details 返答
+```
 ✦ 汎化性能（未知のデータに対する予測精度）を向上させるためには、モデルがデータの「背後にあるパターン」をより
   良く捉えられるようにし、かつ「学習データへの過剰適合」を防ぐ必要があります。
 
@@ -1011,10 +1127,11 @@ if __name__ == "__main__":
 
   これらの中で効果が高く、すぐに実装可能な「特徴量の追加（期間拡張・Tenure）」と「対数変換」を実装して効果を
   検証しましょうか？
+```
 :::
 
 この回答をもとに、まずは特徴量追加と対数変換を実装してもらいました。これにより、MAEが改善しました。
-ただ本来は、様々なアプローチの精度影響を一貫性を持って評価するために、目的に応じて検証方法をきちんと定義し(例えば交差検証を)実装することが最優先になります。
+ただ本来は、様々なアプローチの精度影響を一貫性を持って評価するために、目的に応じて検証方法をきちんと定義し（例えば交差検証を）実装することが最優先になります。
 続いて、Gemini からの提案通り、GBDT への変更、そしてハイパラチューニングとゼロ過剰モデル(購入有無の事前推定)の追加を指示しました。
 
 :::details 生成されたコード（GBDT + Zero-Inflated Model）
@@ -1277,11 +1394,13 @@ if __name__ == "__main__":
 ```
 :::
 
-結果として、RMSEが大幅に改善しました（965.4 -> 807.6）。購入金額0円の人を分類モデルでフィルタリングできた効果と考えられます。
+結果として、RMSEが大幅に改善しました（965.4 -> 807.6）。購入金額0円の顧客を分類モデルでフィルタリングできた効果と考えられます。
+しかしこの方法は推論を2回行う必要があり、パイプラインが複雑になるため注意が必要です。ただ当初のルールの通り、LLM を信じて次に進みます。
 
 ### さらなる改善と仕様の整理
 
-さらなる改善案を聞いたところ、トレンド特徴量や購買間隔統計値の追加が提案されました。しかし前述のように様々なアプローチの有効性を比較するために、先に適切な検証方法を固める必要があります。このまま続けても今の単純な holdout のままで続ける様子なので、gemini をリセットする意図で、ここまでの会話の要約を一旦ファイルに保存した上で再開したいと思います。
+さらなる改善案を聞いたところ、トレンド特徴量や購買間隔統計値の追加が提案されました。しかし前述のように様々なアプローチの有効性を比較するために、先に適切な検証方法を固める必要があります。
+このまま続けても現在の holdout のままで続ける様子なので、当初のLLMを信じるというルールは少し脇に置いて、一度会話をリセットして再開しました。
 変更内容と今後の指針を明確にするため、AIとの対話内容を一度仕様書 (`05_spec.txt`) としてまとめさせ、それを元に再度提案を求めました。
 
 ```
@@ -1658,9 +1777,22 @@ if __name__ == "__main__":
 
 ## おわりに
 
-今回の実験を通して、全体としていくつか感じたことをまとめます。
-まず指示出しのバランスについては、一部誘導的な会話もありましたが、当初やりたかったことは概ね盛り込むことができました。細かい修正は自分でやる方が早いものの、変更内容は明らかだが変更量が多い場合（交差検証など）はAIに任せると効率的でした。
-レビューについては、重要性とともに負担感が目立ちました。仕様が曖昧な部分について LLM が気を利かせて判断してくれることもあったものの、開発者の意図通りであるとは限らないため、レビューを十分に行うことが常に求められます。また、変更内容を毎回レビューするのが徐々に辛くなってきました。変更箇所を探すこととレビューそのものの両方が辛く感じられました。前者は UI の改善で良くなるかもしれませんが、後者は今後も起こり得ることなので良い対策を考えるか慣れるかが必要そうです。さらに、会話形式で修正を繰り返すと、徐々にLLMからの返答の幅も狭まっていくように感じました。適度なタイミングで会話内容や最新仕様を保存して、コンテキストや思考をリセットすることも必要と考えられます。
-全体的に、動作確認時に全く動かないということはほぼ全くなく、この点は体感的にかなり良いです。一方で会話を通してコードを徐々に改善する方法は自分にとっては負担だと感じました。前記事のような最初に一通りまとめた要件をもとに生成してレビュー頻度を抑える方法が自分には合っているように思えます。やりたいことが明確な場合は、最初に詳細な指示を用意する方が会話の往復が少なく効率的だと感じました。
+今回の実験を通して感じたことをまとめます。
 
-今後のコーディング支援ツールや LLM それぞれで改善が進むと思われますので、筆者も引き続き良い使い方やアプローチを探っていきたいと思います。
+**指示出しのバランス**
+一部誘導的な会話もありましたが、当初の目的は概ね達成できました。
+細かい修正は自分で直接編集する方が早い一方、変更内容は明確だがコード量が多い場合（交差検証の実装など）は、AIに任せることで効率的に進められると感じました。
+
+**レビューの重要性と負担**
+レビューは非常に重要ですが、同時に負担も大きいと感じました。
+仕様が曖昧な部分をLLMが補完してくれることもありますが、必ずしも意図通りとは限らないため、入念なチェックが欠かせません。
+また、会話を重ねるごとに変更箇所の特定やレビュー作業自体が辛くなり、心理的な負担が増しました。変更箇所の特定はツールのUI改善で緩和される可能性がありますが、レビュー自体の負担については、慣れや運用上の工夫が必要そうです。
+
+**コンテキストの管理**
+会話形式で修正を繰り返すと、徐々にLLMの提案の幅が狭まる傾向が見られました。適度なタイミングで要件や仕様を整理・保存し、コンテキストをリセットすることが有効だと考えられます。
+
+**全体的な感想**
+生成されたコードが全く動かないことはほぼなく、その点での体験は非常に良好でした。
+しかし、会話を通じて徐々にコードを改善していくスタイルは、私にとっては負担が大きく感じられました。やりたいことが明確な場合は、前記事のように最初に詳細な要件定義を行い、一括で生成してレビュー回数を減らすアプローチの方が、効率的で合っていると感じました。
+
+今後もツールの進化に合わせて、最適な使い方を探っていきたいと思います。
