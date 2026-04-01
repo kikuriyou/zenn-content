@@ -3,7 +3,7 @@ title: "OpenClawの必要な部分だけをClaude Codeで再現する"
 emoji: "🍀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["openclaw", "claude", "mcp"]
-published: false
+published: true
 ---
 
 ## はじめに
